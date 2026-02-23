@@ -29,11 +29,16 @@ scene.add(cube)
 const stats = new Stats()
 document.body.appendChild(stats.dom)
 
+const timer = new THREE.Timer()
+let delta
+
 function animate() {
   requestAnimationFrame(animate)
 
-  cube.rotation.x += 0.01
-  cube.rotation.y += 0.01
+  delta = timer.update().getDelta()
+
+  cube.rotation.x += delta
+  cube.rotation.y += delta
 
   renderer.render(scene, camera)
 
