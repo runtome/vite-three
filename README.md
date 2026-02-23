@@ -8,3 +8,7 @@ npm install @types/three --save-dev
 npm install dat.gui@latest --save-dev
 npm install @types/dat.gui@latest --save-dev
 
+npm install lil-gui
+npm uninstall dat.gui
+npm uninstall @types/dat.gui
+
