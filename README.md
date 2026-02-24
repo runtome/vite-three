@@ -14,3 +14,5 @@ npm uninstall @types/dat.gui
 
 https://polyhaven.com/
 
+npm install jeasings --save-dev
+
