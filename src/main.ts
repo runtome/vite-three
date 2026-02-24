@@ -4,37 +4,18 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js'
 import Stats from 'three/addons/libs/stats.module.js'
-// import hdr from './img/venice_sunset_1k.hdr'
-// import image from './img/grid.png'
-// import model from './models/suzanne_no_material.glb'
 
 const scene = new THREE.Scene()
- 
-// Tree Options:
 
-//Options for loading from sbcode.net (CORS issues)
-// const hdr = 'https://sbcode.net/img/venice_sunset_1k.hdr'
-// const image = 'https://sbcode.net/img/grid.png'
-// const model = 'https://sbcode.net/models/suzanne_no_material.glb'
-
-// Options for loading from jsdelivr (CORS issues)
-const hdr = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/equirectangular/venice_sunset_1k.hdr'
-const image = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/uv_grid_opengl.jpg'
-const model = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/models/gltf/Xbot.glb'
-
-// Options for loading from local files (no CORS issues)
-// const hdr = 'img/venice_sunset_1k.hdr'
-// const image = 'img/grid.png'
-// const model = 'models/suzanne_no_material.glb'
-
-new HDRLoader().load(hdr, (texture) => {
+new HDRLoader().load('img/venice_sunset_1k.hdr', (texture) => {
   texture.mapping = THREE.EquirectangularReflectionMapping
   scene.environment = texture
   scene.background = texture
+  scene.backgroundBlurriness = 1.0
 })
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
-camera.position.set(-2, 0.5, 2)
+camera.position.set(2, 1, -2)
 
 const renderer = new THREE.WebGLRenderer({ antialias: true })
 renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -48,21 +29,29 @@ window.addEventListener('resize', () => {
 })
 
 const controls = new OrbitControls(camera, renderer.domElement)
+controls.target.y = 0.75
 controls.enableDamping = true
 
-const material = new THREE.MeshStandardMaterial()
-material.map = new THREE.TextureLoader().load(image)
-//material.map.colorSpace = THREE.SRGBColorSpace
-
-const plane = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), material)
-plane.rotation.x = -Math.PI / 2
-plane.position.y = -1
-scene.add(plane)
-
-new GLTFLoader().load(model, (gltf) => {
-  gltf.scene.traverse((child) => {
-    ;(child as THREE.Mesh).material = material
-  })
+const loader = new GLTFLoader()
+loader.load('models/suv_body.glb', (gltf) => {
+  scene.add(gltf.scene)
+})
+loader.load('models/suv_wheel.glb', (gltf) => {
+  gltf.scene.position.set(-0.65, 0.2, -0.77)
+  scene.add(gltf.scene)
+})
+loader.load('models/suv_wheel.glb', (gltf) => {
+  gltf.scene.position.set(0.65, 0.2, -0.77)
+  gltf.scene.rotateY(Math.PI)
+  scene.add(gltf.scene)
+})
+loader.load('models/suv_wheel.glb', (gltf) => {
+  gltf.scene.position.set(-0.65, 0.2, 0.57)
+  scene.add(gltf.scene)
+})
+loader.load('models/suv_wheel.glb', (gltf) => {
+  gltf.scene.position.set(0.65, 0.2, 0.57)
+  gltf.scene.rotateY(Math.PI)
   scene.add(gltf.scene)
 })
 
