@@ -14,9 +14,6 @@ light.angle = Math.PI / 16
 light.castShadow = true
 scene.add(light)
 
-const helper = new THREE.SpotLightHelper(light)
-scene.add(helper)
-
 new HDRLoader().load('img/venice_sunset_1k.hdr', (texture) => {
   texture.mapping = THREE.EquirectangularReflectionMapping
   scene.environment = texture
@@ -26,8 +23,8 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 camera.position.set(1.5, 0.75, 2)
 
 const renderer = new THREE.WebGLRenderer({ antialias: true })
-//renderer.toneMapping = THREE.ACESFilmicToneMapping
-//renderer.toneMappingExposure = 0.1
+renderer.toneMapping = THREE.ACESFilmicToneMapping
+renderer.toneMappingExposure = 0.1
 renderer.shadowMap.enabled = true
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
@@ -49,8 +46,6 @@ lensflare.addElement(new LensflareElement(textureFlare0, 1000, 0))
 light.add(lensflare)
 
 new GLTFLoader().load('models/suzanne_scene.glb', (gltf) => {
-  console.log(gltf)
-
   const suzanne = gltf.scene.getObjectByName('Suzanne') as THREE.Mesh
   suzanne.castShadow = true
 
